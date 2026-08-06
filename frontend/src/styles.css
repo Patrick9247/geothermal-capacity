@@ -1,0 +1,18 @@
+:root { --el-color-primary: #1E3E6E; --el-color-primary-light-3: #61769a; --el-color-primary-light-5: #8f9eb7; --el-color-primary-light-7: #bcc6d4; --el-color-primary-light-8: #d2d8e2; --el-color-primary-light-9: #e8ebf0; --el-color-primary-dark-2: #183258; color: #1f2937; background: #f4f7f6; font-family: Inter, "Microsoft YaHei", sans-serif; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+.page { min-height: 100vh; }
+.el-header { display: flex; align-items: center; gap: 16px; background: #1E3E6E; color: white; }
+.el-header h1 { font-size: 20px; }
+.el-header span { opacity: .78; }
+.header-user { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.header-user .el-button { color: white; }
+.el-main { max-width: 1280px; width: 100%; margin: 0 auto; padding-top: 28px; }
+.el-input-number { width: 100%; }
+.main-tabs .el-tabs__item { font-size: 16px; }
+.auth-page { min-height: 100vh; display: grid; place-items: center; background: linear-gradient(135deg, #1E3E6E, #355d97); }
+.auth-card { width: min(420px, calc(100vw - 32px)); }
+.auth-card h1 { margin: 0; color: #1E3E6E; font-size: 22px; }
+.auth-card p { color: #64748b; margin: 0 0 16px; }
+.auth-card small { display: block; margin-top: 16px; color: #64748b; line-height: 1.5; }
+.full-button { width: 100%; }
