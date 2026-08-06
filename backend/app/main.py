@@ -1,4 +1,5 @@
 import sys
+import uvicorn
 from pathlib import Path
 
 
@@ -46,9 +47,14 @@ def health_check():
 
 
 def run_development_server() -> None:
-    """Start the API when this file is run directly."""
-    import uvicorn
+    import os
+    from subprocess import Popen
 
+    frontend_dir = BACKEND_DIR.parent / "frontend"
+    os.chdir(frontend_dir)
+    Popen(["npm", "run", "dev"], shell=True)
+
+    os.chdir(BACKEND_DIR)
     uvicorn.run(
         "app.main:app",
         host="0.0.0.0",
