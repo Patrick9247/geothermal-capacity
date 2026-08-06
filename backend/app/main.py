@@ -51,8 +51,8 @@ def run_development_server() -> None:
 
     uvicorn.run(
         "app.main:app",
-        host="127.0.0.1",
-        port=8000,
+        host="0.0.0.0",
+        port=8082,
         reload=True,
         app_dir=str(BACKEND_DIR),
     )
