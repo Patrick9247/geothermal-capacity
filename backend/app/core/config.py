@@ -7,7 +7,6 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 BACKEND_DIR = Path(__file__).resolve().parents[2]
 DEFAULT_DATABASE_PATH = BACKEND_DIR / "data" / "geothermal.db"
 
-
 class Settings(BaseSettings):
     app_name: str = "地热产能计算 API"
     database_url: str = f"sqlite:///{DEFAULT_DATABASE_PATH.as_posix()}"
@@ -22,7 +21,6 @@ class Settings(BaseSettings):
     @property
     def cors_origin_list(self) -> list[str]:
         return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
-
 
 @lru_cache
 def get_settings() -> Settings:

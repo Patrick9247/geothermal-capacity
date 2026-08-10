@@ -16,11 +16,8 @@ function render() {
     series: [{ type: 'bar', data: [props.result.thermal_energy_gj, props.result.electrical_power_mw], itemStyle: { color: '#16a085' } }],
   })
 }
-
 watch(() => props.result, async () => { await nextTick(); render() })
 onBeforeUnmount(() => chart?.dispose())
 </script>
-
 <template><div ref="chartEl" class="chart" /></template>
-
 <style scoped>.chart { height: 320px; width: 100%; }</style>

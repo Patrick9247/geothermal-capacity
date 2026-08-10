@@ -14,15 +14,12 @@ class VolumetricInput:
     conversion_efficiency: float
     project_lifetime_years: float
 
-
 @dataclass(frozen=True)
 class CalculationResult:
     model: str
     thermal_energy_gj: float
     electrical_power_mw: float
 
-
 class CalculationModel(Protocol):
     name: str
-
     def calculate(self, data: VolumetricInput) -> CalculationResult: ...

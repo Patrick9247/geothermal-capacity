@@ -1,10 +1,7 @@
 import threading
 import time
-
-
 class SnowflakeIdGenerator:
-    """Thread-safe 64-bit Snowflake ID generator (41-bit time, 10-bit worker, 12-bit sequence)."""
-
+    
     EPOCH_MS = 1_704_067_200_000  # 2024-01-01T00:00:00Z
     WORKER_BITS = 10
     SEQUENCE_BITS = 12

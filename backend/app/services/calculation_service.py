@@ -15,7 +15,6 @@ from app.schemas.calculation import (
     VolumetricCalculationRequest,
 )
 
-
 class CalculationService:
     def __init__(self, repository: CalculationRepository, heat_flow_repository: HeatFlowRepository | None = None):
         self.repository = repository
@@ -31,7 +30,7 @@ class CalculationService:
 
     def calculate_heat_flow(self, request: HeatFlowCalculationRequest) -> HeatFlowCalculationResponse:
         if self.heat_flow_repository is None:
-            raise RuntimeError("缺少热流量记录仓储")
+            raise RuntimeError("缺少热流量记录")
         results: list[HeatFlowPointResponse] = []
         for index, point in enumerate(request.points, start=1):
             try:
@@ -57,7 +56,7 @@ class CalculationService:
 
     def save_heat_flow_inputs(self, request: HeatFlowCalculationRequest) -> HeatFlowDraftResponse:
         if self.heat_flow_repository is None:
-            raise RuntimeError("缺少热流量记录仓储")
+            raise RuntimeError("缺少热流量记录")
         ids: list[int] = []
         for point in request.points:
             data = HeatFlowInput(**point.model_dump(exclude={"id"}))
@@ -67,7 +66,7 @@ class CalculationService:
 
     def list_heat_flow_records(self) -> list[HeatFlowRecordResponse]:
         if self.heat_flow_repository is None:
-            raise RuntimeError("缺少热流量记录仓储")
+            raise RuntimeError("缺少热流量记录")
         return [
             HeatFlowRecordResponse(
                 id=record.id,
@@ -87,5 +86,5 @@ class CalculationService:
 
     def delete_heat_flow_record(self, record_id: int) -> bool:
         if self.heat_flow_repository is None:
-            raise RuntimeError("缺少热流量记录仓储")
+            raise RuntimeError("缺少热流量记录")
         return self.heat_flow_repository.delete(record_id)

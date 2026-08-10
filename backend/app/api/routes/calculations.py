@@ -17,9 +17,7 @@ from app.schemas.calculation import (
     VolumetricCalculationRequest,
 )
 from app.services.calculation_service import CalculationService
-
 router = APIRouter(prefix="/calculations", tags=["calculations"])
-
 
 @router.post("/volumetric", response_model=CalculationResponse)
 def calculate_volumetric(
@@ -29,7 +27,6 @@ def calculate_volumetric(
 ):
     return CalculationService(CalculationRepository(db)).calculate_volumetric(request)
 
-
 @router.get("/heat-flow", response_model=list[HeatFlowRecordResponse])
 def list_heat_flow_records(
     db: Session = Depends(get_db),
@@ -37,7 +34,6 @@ def list_heat_flow_records(
 ):
     service = CalculationService(CalculationRepository(db), HeatFlowRepository(db))
     return service.list_heat_flow_records()
-
 
 @router.put("/heat-flow", response_model=HeatFlowDraftResponse)
 def save_heat_flow_inputs(
@@ -47,7 +43,6 @@ def save_heat_flow_inputs(
 ):
     service = CalculationService(CalculationRepository(db), HeatFlowRepository(db))
     return service.save_heat_flow_inputs(request)
-
 
 @router.post("/heat-flow", response_model=HeatFlowCalculationResponse)
 def calculate_heat_flow(

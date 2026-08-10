@@ -1,14 +1,8 @@
 from app.domain.models import CalculationResult, VolumetricInput
 
-
 class VolumetricCalculationModel:
-    """Simplified volumetric geothermal capacity model.
-
-    Stored heat = volume × porosity × recovery × density × heat capacity × ΔT.
-    """
 
     name = "volumetric"
-
     def calculate(self, data: VolumetricInput) -> CalculationResult:
         delta_t = max(data.reservoir_temperature_c - data.reference_temperature_c, 0)
         thermal_energy_kj = (

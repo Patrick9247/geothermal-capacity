@@ -4,7 +4,7 @@ from pathlib import Path
 
 
 def configure_import_path() -> Path:
-    """Allow this file to be launched directly by an IDE or Python."""
+
     backend_dir = Path(__file__).resolve().parents[1]
     if str(backend_dir) not in sys.path:
         sys.path.insert(0, str(backend_dir))
@@ -45,7 +45,6 @@ app.include_router(users_router, prefix="/api/v1")
 def health_check():
     return {"status": "ok"}
 
-
 def run_development_server() -> None:
     import os
     from subprocess import Popen
@@ -62,7 +61,6 @@ def run_development_server() -> None:
         reload=True,
         app_dir=str(BACKEND_DIR),
     )
-
 
 if __name__ == "__main__":
     run_development_server()

@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 from datetime import datetime
-
 import seuif97
-
 
 @dataclass(frozen=True)
 class HeatFlowInput:
@@ -14,18 +12,13 @@ class HeatFlowInput:
     w1_kg_s: float
     w2_kg_s: float
 
-
 @dataclass(frozen=True)
 class HeatFlowResult:
     time: datetime
     qw_mw: float
     qs_mw: float
     q_total_mw: float
-
-
 class HeatFlowCalculationModel:
-    """Heat-flow calculator based on IAPWS-IF97 properties from seuif97."""
-
     def calculate(self, data: HeatFlowInput) -> HeatFlowResult:
         try:
             water_enthalpy_kj_kg = seuif97.pt2h(data.p1_mpa, data.t1_c)

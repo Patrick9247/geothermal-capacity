@@ -1,8 +1,5 @@
 from sqlalchemy.orm import Session
-
 from app.persistence.entities import CalculationRecord
-
-
 class CalculationRepository:
     def __init__(self, db: Session):
         self.db = db

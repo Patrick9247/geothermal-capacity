@@ -11,16 +11,13 @@ from app.schemas.auth import UserResponse, UserUpdateRequest
 
 router = APIRouter(prefix="/users", tags=["users"])
 
-
 @router.get("/me", response_model=UserResponse)
 def get_me(user: Annotated[User, Depends(get_current_user)]):
     return UserResponse.model_validate(user)
 
-
 @router.get("", response_model=list[UserResponse])
 def list_users(_: Annotated[User, Depends(get_current_admin)], db: Session = Depends(get_db)):
     return [UserResponse.model_validate(user) for user in UserRepository(db).list()]
-
 
 @router.patch("/{user_id}", response_model=UserResponse)
 def update_user(

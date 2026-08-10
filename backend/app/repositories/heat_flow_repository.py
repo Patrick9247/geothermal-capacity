@@ -1,9 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
-
 from app.domain.heat_flow import HeatFlowInput, HeatFlowResult
 from app.persistence.entities import HeatFlowRecord
-
 
 class HeatFlowRepository:
     def __init__(self, db: Session):

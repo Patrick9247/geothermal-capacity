@@ -4,13 +4,7 @@ from app.core.config import get_settings
 from app.core.snowflake import SnowflakeIdGenerator
 from app.database import engine
 
-
 def migrate_legacy_user_ids() -> None:
-    """Convert former sequential user IDs to Snowflake IDs.
-
-    There are currently no foreign keys pointing to users. New IDs are much larger
-    than historical sequential IDs, so only those legacy rows are transformed.
-    """
     generator = SnowflakeIdGenerator(get_settings().snowflake_worker_id)
     with engine.begin() as connection:
         legacy_ids = connection.execute(text("SELECT id FROM users WHERE id < :limit"), {"limit": 1 << 22}).scalars().all()
@@ -19,7 +13,6 @@ def migrate_legacy_user_ids() -> None:
                 text("UPDATE users SET id = :new_id WHERE id = :old_id"),
                 {"new_id": generator.next_id(), "old_id": legacy_id},
             )
-
 
 def migrate_user_email_column() -> None:
     """Add the nullable email column for databases created before email support."""

@@ -1,8 +1,5 @@
 from datetime import datetime
-
 from pydantic import BaseModel, Field, field_validator
-
-
 class VolumetricCalculationRequest(BaseModel):
     name: str = Field(default="未命名方案", max_length=100)
     reservoir_volume_m3: float = Field(gt=0, description="储层体积（m³）")
@@ -15,13 +12,11 @@ class VolumetricCalculationRequest(BaseModel):
     conversion_efficiency: float = Field(gt=0, le=1)
     project_lifetime_years: float = Field(gt=0)
 
-
 class CalculationResponse(BaseModel):
     id: int | None = None
     model: str
     thermal_energy_gj: float
     electrical_power_mw: float
-
 
 class HeatFlowPointRequest(BaseModel):
     id: int | None = None
@@ -47,10 +42,8 @@ class HeatFlowPointRequest(BaseModel):
                     continue
         return value
 
-
 class HeatFlowCalculationRequest(BaseModel):
     points: list[HeatFlowPointRequest] = Field(min_length=1, max_length=5000)
-
 
 class HeatFlowPointResponse(BaseModel):
     id: int
@@ -59,14 +52,11 @@ class HeatFlowPointResponse(BaseModel):
     qs_mw: float
     q_total_mw: float
 
-
 class HeatFlowCalculationResponse(BaseModel):
     results: list[HeatFlowPointResponse]
 
-
 class HeatFlowDraftResponse(BaseModel):
     ids: list[int]
-
 
 class HeatFlowRecordResponse(BaseModel):
     id: int

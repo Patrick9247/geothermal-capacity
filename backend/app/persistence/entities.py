@@ -1,10 +1,7 @@
 from datetime import datetime
-
 from sqlalchemy import BigInteger, DateTime, Float, Integer, String, func
 from sqlalchemy.orm import Mapped, mapped_column
-
 from app.database import Base
-
 
 class CalculationRecord(Base):
     __tablename__ = "calculation_records"
@@ -15,7 +12,6 @@ class CalculationRecord(Base):
     thermal_energy_gj: Mapped[float] = mapped_column(Float)
     electrical_power_mw: Mapped[float] = mapped_column(Float)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
-
 
 class User(Base):
     __tablename__ = "users"
@@ -28,10 +24,7 @@ class User(Base):
     is_active: Mapped[bool] = mapped_column(default=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
 
-
 class HeatFlowRecord(Base):
-    """Calculation records; field comments contain the requested parameter notes."""
-
     __tablename__ = "heat_flow_records"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True, comment="记录序号")

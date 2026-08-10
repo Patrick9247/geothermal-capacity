@@ -1,12 +1,9 @@
 from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session
-
 from app.persistence.entities import User
 from app.core.config import get_settings
 from app.core.snowflake import SnowflakeIdGenerator
-
 id_generator = SnowflakeIdGenerator(get_settings().snowflake_worker_id)
-
 
 class UserRepository:
     def __init__(self, db: Session):

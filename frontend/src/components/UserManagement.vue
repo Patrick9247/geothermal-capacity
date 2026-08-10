@@ -2,10 +2,8 @@
 import { onMounted, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { listUsers, updateUser } from '../api/users'
-
 const loading = ref(false)
 const users = ref([])
-
 async function loadUsers() {
   loading.value = true
   try { users.value = (await listUsers()).data }
