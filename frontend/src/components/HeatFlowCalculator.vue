@@ -2,6 +2,7 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { calculateHeatFlow, deleteHeatFlowRecord, getHeatFlowRecords, saveHeatFlowInputs } from '../api/calculations'
+import HeatFlowBarChart from './HeatFlowBarChart.vue'
 import HeatFlowChart from './HeatFlowChart.vue'
 import HeatFlowPieChart from './HeatFlowPieChart.vue'
 
@@ -250,6 +251,7 @@ watch(rows, () => {
     </el-card>
     <el-card class="result-card" header="各时间点计算结果">
       <el-table :data="results" border max-height="320"><el-table-column label="时间" min-width="180"><template #default="{ row }">{{ formatMinute(row.time) }}</template></el-table-column><el-table-column prop="qw_mw" label="Qw（MW）" /><el-table-column prop="qs_mw" label="Qs（MW）" /><el-table-column prop="q_total_mw" label="Q总（MW）" /></el-table>
+      <HeatFlowBarChart :results="results" />
     </el-card>
     <el-card class="result-card" header="地热产能趋势"><HeatFlowChart :results="results" /></el-card>
   </template>
