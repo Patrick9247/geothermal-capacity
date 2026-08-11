@@ -3,6 +3,7 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { calculateHeatFlow, deleteHeatFlowRecord, getHeatFlowRecords, saveHeatFlowInputs } from '../api/calculations'
 import HeatFlowChart from './HeatFlowChart.vue'
+import HeatFlowPieChart from './HeatFlowPieChart.vue'
 
 let nextRowId = 2
 const loading = ref(false)
@@ -177,6 +178,47 @@ watch(rows, () => {
 </script>
 
 <template>
+  <el-card class="formula-card">
+    <template #header><div class="card-header"><span>计算公式与说明</span></div></template>
+    <div class="formula-grid">
+      <div class="formula-item">
+        <div class="formula-name">地热水热流量 Q<sub>W</sub></div>
+        <div class="formula-body">Q<sub>W</sub> = W<sub>1</sub> × h<sub>W</sub>(T<sub>1</sub>, P<sub>1</sub>) / 1000</div>
+        <div class="formula-unit">单位：MW</div>
+      </div>
+      <div class="formula-item">
+        <div class="formula-name">地热蒸汽热流量 Q<sub>s</sub></div>
+        <div class="formula-body">Q<sub>s</sub> = W<sub>2</sub> × h<sub>s</sub>(T<sub>2</sub>, P<sub>2</sub>) / 1000</div>
+        <div class="formula-unit">单位：MW</div>
+      </div>
+      <div class="formula-item">
+        <div class="formula-name">总产能 Q<sub>总</sub></div>
+        <div class="formula-body">Q<sub>总</sub> = Q<sub>W</sub> + Q<sub>s</sub></div>
+        <div class="formula-unit">单位：MW</div>
+      </div>
+    </div>
+    <table class="symbol-table">
+      <thead>
+        <tr><th>符号</th><th>含义</th><th>单位</th><th>输入/输出</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Q<sub>W</sub></td><td>地热水热流量</td><td>MW</td><td>输出</td></tr>
+        <tr><td>Q<sub>s</sub></td><td>地热蒸汽热流量</td><td>MW</td><td>输出</td></tr>
+        <tr><td>Q<sub>总</sub></td><td>地热井总产能（Q<sub>W</sub> + Q<sub>s</sub>）</td><td>MW</td><td>输出</td></tr>
+        <tr><td>W<sub>1</sub></td><td>地热水质量流量</td><td>kg/s</td><td>输入</td></tr>
+        <tr><td>W<sub>2</sub></td><td>地热蒸汽质量流量</td><td>kg/s</td><td>输入</td></tr>
+        <tr><td>h<sub>W</sub></td><td>地热水比焓</td><td>kJ/kg</td><td>库函数计算</td></tr>
+        <tr><td>h<sub>s</sub></td><td>地热蒸汽比焓</td><td>kJ/kg</td><td>库函数计算</td></tr>
+        <tr><td>T<sub>1</sub>、P<sub>1</sub></td><td>地热水温度、压力</td><td>℃、MPa</td><td>输入</td></tr>
+        <tr><td>T<sub>2</sub>、P<sub>2</sub></td><td>地热蒸汽温度、压力</td><td>℃、MPa</td><td>输入</td></tr>
+      </tbody>
+    </table>
+    <el-alert type="info" :closable="false" class="seuif97-note">
+      <template #title>焓值由 seuif97 库计算</template>
+      <p>h = seuif97.pt2h(P, T)，即根据压力 P（MPa）和温度 T（℃）求得水/水蒸气的比焓 h（kJ/kg）。seuif97 是基于 IAPWS-IF97 国际标准的水和水蒸气热力性质计算库；流量与焓的乘积 W × h 单位为 kW（kg/s × kJ/kg），除以 1000 后即为 MW。当压力或温度超出 seuif97 的有效计算范围时，计算会返回“压力或温度超出 seuif97 的有效计算范围”的提示。</p>
+    </el-alert>
+  </el-card>
+
   <el-card>
     <template #header><div class="card-header"><span>地热产能计算</span>
       <div><input ref="fileInput" class="file-input" type="file" accept=".csv,text/csv" @change="importData" />
@@ -204,6 +246,7 @@ watch(rows, () => {
   <template v-if="results.length">
     <el-card class="result-card" header="计算结果（最新时间点）">
       <el-row :gutter="16"><el-col :xs="24" :sm="8"><el-statistic title="Qw（地热水热流量）" :value="latestResult.qw_mw" :precision="4"><template #suffix>MW</template></el-statistic></el-col><el-col :xs="24" :sm="8"><el-statistic title="Qs（地热蒸汽热流量）" :value="latestResult.qs_mw" :precision="4"><template #suffix>MW</template></el-statistic></el-col><el-col :xs="24" :sm="8"><el-statistic title="Q总（Qw + Qs）" :value="latestResult.q_total_mw" :precision="4"><template #suffix>MW</template></el-statistic></el-col></el-row>
+      <HeatFlowPieChart :result="latestResult" />
     </el-card>
     <el-card class="result-card" header="各时间点计算结果">
       <el-table :data="results" border max-height="320"><el-table-column label="时间" min-width="180"><template #default="{ row }">{{ formatMinute(row.time) }}</template></el-table-column><el-table-column prop="qw_mw" label="Qw（MW）" /><el-table-column prop="qs_mw" label="Qs（MW）" /><el-table-column prop="q_total_mw" label="Q总（MW）" /></el-table>
@@ -214,6 +257,19 @@ watch(rows, () => {
 
 <style scoped>
 .card-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.formula-card { margin-bottom: 20px; }
+.formula-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+@media (max-width: 900px) { .formula-grid { grid-template-columns: 1fr; } }
+.formula-item { background: #f4f7f6; border-left: 4px solid #1E3E6E; border-radius: 6px; padding: 12px 14px; }
+.formula-name { font-weight: 600; color: #1E3E6E; margin-bottom: 6px; font-size: 13px; }
+.formula-body { font-size: 16px; font-family: "Cambria Math", "Times New Roman", serif; color: #1f2937; }
+.formula-unit { font-size: 12px; color: #64748b; margin-top: 4px; }
+.symbol-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 14px; }
+.symbol-table th, .symbol-table td { border: 1px solid #e5e7eb; padding: 6px 10px; text-align: left; }
+.symbol-table th { background: #f4f7f6; font-weight: 600; white-space: nowrap; }
+.symbol-table td:first-child { text-align: center; font-family: "Cambria Math", "Times New Roman", serif; white-space: nowrap; }
+.seuif97-note { line-height: 1.6; }
+.seuif97-note p { margin: 4px 0 0; font-size: 13px; }
 .file-input { display: none; }
 .input-table { width: 100%; }
 .input-table :deep(.el-input-number), .input-table :deep(.el-date-editor) { width: 100%; }
