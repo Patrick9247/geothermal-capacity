@@ -6,4 +6,3 @@ python-jose[cryptography]>=3.3,<4.0
 bcrypt>=4.0,<6.0
 email-validator>=2.0,<3.0
 seuif97==2.3.8
-seuif97

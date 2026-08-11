@@ -1,6 +1,5 @@
 import client from './client'
 
-export const calculateVolumetric = (payload) => client.post('/calculations/volumetric', payload)
 export const calculateHeatFlow = (points) => client.post('/calculations/heat-flow', { points })
 export const getHeatFlowRecords = () => client.get('/calculations/heat-flow')
 export const deleteHeatFlowRecord = (id) => client.delete(`/calculations/heat-flow/${id}`)
