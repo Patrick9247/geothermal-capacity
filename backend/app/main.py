@@ -46,14 +46,6 @@ def health_check():
     return {"status": "ok"}
 
 def run_development_server() -> None:
-    import os
-    from subprocess import Popen
-
-    frontend_dir = BACKEND_DIR.parent / "frontend"
-    os.chdir(frontend_dir)
-    Popen(["npm", "run", "dev"], shell=True)
-
-    os.chdir(BACKEND_DIR)
     uvicorn.run(
         "app.main:app",
         host="0.0.0.0",
